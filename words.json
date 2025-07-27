@@ -1,0 +1,17 @@
+{
+  "easy": [
+    "apple", "banana", "cat", "dog", "house", "tree", "sun", "moon", "car", "book",
+    "chair", "table", "phone", "water", "fire", "flower", "hat", "shoe", "ball", "bird"
+  ],
+  "medium": [
+    "airplane", "bicycle", "camera", "diamond", "elephant", "guitar", "hospital", "island",
+    "jungle", "kangaroo", "lighthouse", "mountain", "notebook", "octopus", "piano",
+    "question", "rainbow", "sandwich", "telescope", "umbrella"
+  ],
+  "hard": [
+    "alphabet", "basketball", "chameleon", "dynamite", "extravaganza", "flabbergasted",
+    "grandiose", "hippopotamus", "incandescent", "juxtaposition", "kaleidoscope",
+    "labyrinth", "magnificent", "nefarious", "ostentatious", "phenomenon", "quintessential",
+    "resplendent", "serendipity", "tremendous"
+  ]
+}
