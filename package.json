@@ -1,7 +1,8 @@
 {
   "name": "draw-and-guess-backend",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
+
   "scripts": {
     "start": "node index.js"
   },
