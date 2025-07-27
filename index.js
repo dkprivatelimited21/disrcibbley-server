@@ -1,13 +1,10 @@
-import express from 'express';
-import http from 'http';
-import { Server } from 'socket.io';
-import path from 'path';
-import { fileURLToPath } from 'url';
-const wordsData = require('./words.json');
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const path = require('path');
+const fs = require('fs');
 
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const wordsData = JSON.parse(fs.readFileSync(path.join(__dirname, './words.json'), 'utf-8'));
 
 const app = express();
 const server = http.createServer(app);
@@ -18,11 +15,10 @@ const io = new Server(server, {
   }
 });
 
-// Game state storage
+// Game state
 const rooms = {};
 const players = {};
 
-// Word lists
 const wordLists = {
   easy: wordsData.easy,
   medium: [...wordsData.easy, ...wordsData.medium],
@@ -76,20 +72,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on('joinRoom', (roomCode, playerName, callback) => {
-    if (!rooms[roomCode]) {
-      callback({ error: 'Room not found' });
-      return;
-    }
-
-    if (rooms[roomCode].state !== 'lobby') {
-      callback({ error: 'Game already started' });
-      return;
-    }
-
-    if (rooms[roomCode].players.length >= 8) {
-      callback({ error: 'Room is full' });
-      return;
-    }
+    if (!rooms[roomCode]) return callback({ error: 'Room not found' });
+    if (rooms[roomCode].state !== 'lobby') return callback({ error: 'Game already started' });
+    if (rooms[roomCode].players.length >= 8) return callback({ error: 'Room is full' });
 
     const player = { id: socket.id, name: playerName, isHost: false };
 
@@ -141,8 +126,8 @@ io.on('connection', (socket) => {
     room.gameState.word = getRandomWord(room.gameState.difficulty);
     room.gameState.playersWhoGuessed = [];
     room.gameState.drawing = null;
-
     room.gameState.timer = room.gameState.roundTime;
+
     room.timerInterval = setInterval(() => {
       room.gameState.timer--;
 
@@ -282,7 +267,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// Static serving for frontend build (optional)
+// Optional: serve frontend if building full-stack
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/dist')));
   app.get('*', (req, res) => {
@@ -292,5 +277,5 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
