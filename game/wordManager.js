@@ -1,4 +1,4 @@
-const wordLists = require('./words.json');
+const wordLists = require('../words.json');
 const activeWords = new Map();
 const WORD_LOCK_TIME = 30000; // 30 seconds lock after correct guess
 
